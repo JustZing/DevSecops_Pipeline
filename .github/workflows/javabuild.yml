@@ -41,7 +41,7 @@ jobs:
 
       - name: Upload JAR to JFrog
         run: |
-          jfrog rt u "target/*.jar" "petjfrog-repo/spring-petclinic/" \
+          jfrog rt u "target/*.jar" "petfrogj-repo/spring-petclinic/" \
             --build-name=spring-petclinic \
             --build-number=${{ github.run_number }}
     
