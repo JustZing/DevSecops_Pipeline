@@ -2,12 +2,11 @@
 name: Build
 
 on: 
-  workflow_call:
+ workflow_call:
 
 jobs:
   build:
     runs-on: java_build
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -28,20 +27,23 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
 
-      - name: List generated JARs (debug)
-        run: ls -lh target/
-
-      - name: Install & Configure JFrog CLI
+      # - name: Upload Build Artifact
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: jar
+      #     path: target/*.jar
+        
+    #   - name: Configure JFrog CLI
+    # token
+    #     run: |
+    #         jfrog config add my-artifactory --url=https://trial42aeja.jfrog.io --apikey=${{ secrets.JFROG_TOKEN }}
+      - name: Configure JFrog CLI
         uses: jfrog/setup-jfrog-cli@v3
         with:
-          version: 2.53.1 
+          version: 2.53.1
         env:
           JF_URL: https://zing.jfrog.io
           JF_ACCESS_TOKEN: ${{ secrets.JFROG_TOKEN }}
-
       - name: Upload JAR to JFrog
         run: |
-          jfrog rt u "target/*.jar" "petfrogj-repo/spring-petclinic/" \
-            --build-name=spring-petclinic \
-            --build-number=${{ github.run_number }}
-    
+           jf rt u "target/*.jar" "petfrogj-repo/"   
